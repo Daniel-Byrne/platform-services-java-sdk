@@ -14,7 +14,6 @@
 package com.ibm.cloud.platform_services.iam_identity.v1.model;
 
 import com.ibm.cloud.platform_services.iam_identity.v1.model.AccountSettingsUserDomainRestriction;
-import com.ibm.cloud.platform_services.iam_identity.v1.model.CreateAccountSettingsTemplateVersionOptions;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.TemplateAccountSettings;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.UserMfa;
 import com.ibm.cloud.platform_services.iam_identity.v1.utils.TestUtilities;
@@ -26,14 +25,14 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * Unit test class for the CreateAccountSettingsTemplateVersionOptions model.
+ * Unit test class for the TemplateAccountSettings model.
  */
-public class CreateAccountSettingsTemplateVersionOptionsTest {
+public class TemplateAccountSettingsTest {
   final HashMap<String, InputStream> mockStreamMap = TestUtilities.createMockStreamMap();
   final List<FileWithMetadata> mockListFileWithMetadata = TestUtilities.creatMockListFileWithMetadata();
 
   @Test
-  public void testCreateAccountSettingsTemplateVersionOptions() throws Throwable {
+  public void testTemplateAccountSettings() throws Throwable {
     AccountSettingsUserDomainRestriction accountSettingsUserDomainRestrictionModel = new AccountSettingsUserDomainRestriction.Builder()
       .realmId("IBMid")
       .invitationEmailAllowPatterns(java.util.Arrays.asList("*.*@company.com"))
@@ -79,23 +78,20 @@ public class CreateAccountSettingsTemplateVersionOptionsTest {
     assertEquals(templateAccountSettingsModel.userMfa(), java.util.Arrays.asList(userMfaModel));
     assertEquals(templateAccountSettingsModel.restrictUserDomainsAccountOverride(), Boolean.valueOf(true));
 
-    CreateAccountSettingsTemplateVersionOptions createAccountSettingsTemplateVersionOptionsModel = new CreateAccountSettingsTemplateVersionOptions.Builder()
-      .templateId("testString")
-      .accountId("testString")
-      .name("testString")
-      .description("testString")
-      .accountSettings(templateAccountSettingsModel)
-      .build();
-    assertEquals(createAccountSettingsTemplateVersionOptionsModel.templateId(), "testString");
-    assertEquals(createAccountSettingsTemplateVersionOptionsModel.accountId(), "testString");
-    assertEquals(createAccountSettingsTemplateVersionOptionsModel.name(), "testString");
-    assertEquals(createAccountSettingsTemplateVersionOptionsModel.description(), "testString");
-    assertEquals(createAccountSettingsTemplateVersionOptionsModel.accountSettings(), templateAccountSettingsModel);
-  }
+    String json = TestUtilities.serialize(templateAccountSettingsModel);
 
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testCreateAccountSettingsTemplateVersionOptionsError() throws Throwable {
-    new CreateAccountSettingsTemplateVersionOptions.Builder().build();
+    TemplateAccountSettings templateAccountSettingsModelNew = TestUtilities.deserialize(json, TemplateAccountSettings.class);
+    assertTrue(templateAccountSettingsModelNew instanceof TemplateAccountSettings);
+    assertEquals(templateAccountSettingsModelNew.restrictCreateServiceId(), "NOT_SET");
+    assertEquals(templateAccountSettingsModelNew.restrictCreatePlatformApikey(), "NOT_SET");
+    assertEquals(templateAccountSettingsModelNew.restrictUserListVisibility(), "NOT_RESTRICTED");
+    assertEquals(templateAccountSettingsModelNew.allowedIpAddresses(), "testString");
+    assertEquals(templateAccountSettingsModelNew.mfa(), "NONE");
+    assertEquals(templateAccountSettingsModelNew.sessionExpirationInSeconds(), "86400");
+    assertEquals(templateAccountSettingsModelNew.sessionInvalidationInSeconds(), "7200");
+    assertEquals(templateAccountSettingsModelNew.maxSessionsPerIdentity(), "testString");
+    assertEquals(templateAccountSettingsModelNew.systemAccessTokenExpirationInSeconds(), "3600");
+    assertEquals(templateAccountSettingsModelNew.systemRefreshTokenExpirationInSeconds(), "259200");
+    assertEquals(templateAccountSettingsModelNew.restrictUserDomainsAccountOverride(), Boolean.valueOf(true));
   }
-
 }

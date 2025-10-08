@@ -49,5 +49,6 @@ public class AccountSettingsAssignedTemplatesSectionTest {
     assertNull(accountSettingsAssignedTemplatesSectionModel.getSystemAccessTokenExpirationInSeconds());
     assertNull(accountSettingsAssignedTemplatesSectionModel.getSystemRefreshTokenExpirationInSeconds());
     assertNull(accountSettingsAssignedTemplatesSectionModel.getUserMfa());
+    assertNull(accountSettingsAssignedTemplatesSectionModel.isRestrictUserDomainsAccountOverride());
   }
 }

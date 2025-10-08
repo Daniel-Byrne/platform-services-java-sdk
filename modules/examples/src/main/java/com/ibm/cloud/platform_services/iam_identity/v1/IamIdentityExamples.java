@@ -100,7 +100,9 @@ public class IamIdentityExamples {
     private static String accountSettingsTemplateAssignmentEtag;
 
     static {
-        System.setProperty("IBM_CREDENTIALS_FILE", "../../iam_identity.env");
+        if (System.getProperty("IBM_CREDENTIALS_FILE") == null) {
+                System.setProperty("IBM_CREDENTIALS_FILE", "../../iam_identity.env");
+        }
     }
 
     public static void main(String[] args) throws Exception {
@@ -1697,7 +1699,7 @@ public class IamIdentityExamples {
 
             // begin-create_account_settings_template
 
-            AccountSettingsComponent accountSettings = new AccountSettingsComponent.Builder()
+            TemplateAccountSettings accountSettings = new TemplateAccountSettings.Builder()
                     .mfa("LEVEL1")
                     .systemAccessTokenExpirationInSeconds("3000")
                     .build();
@@ -1776,7 +1778,7 @@ public class IamIdentityExamples {
 
             // begin-update_account_settings_template_version
 
-            AccountSettingsComponent accountSettings = new AccountSettingsComponent.Builder()
+            TemplateAccountSettings accountSettings = new TemplateAccountSettings.Builder()
                     .mfa("LEVEL1")
                     .systemAccessTokenExpirationInSeconds("3000")
                     .build();
@@ -1905,7 +1907,7 @@ public class IamIdentityExamples {
 
             // begin-create_account_settings_template_version
 
-            AccountSettingsComponent accountSettings = new AccountSettingsComponent.Builder()
+            TemplateAccountSettings accountSettings = new TemplateAccountSettings.Builder()
                     .mfa("LEVEL1")
                     .systemAccessTokenExpirationInSeconds("2600")
                     .restrictCreatePlatformApikey("RESTRICTED")

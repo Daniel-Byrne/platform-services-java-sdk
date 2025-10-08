@@ -13,8 +13,9 @@
 
 package com.ibm.cloud.platform_services.iam_identity.v1.model;
 
-import com.ibm.cloud.platform_services.iam_identity.v1.model.AccountSettingsComponent;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.AccountSettingsUserDomainRestriction;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.CreateAccountSettingsTemplateOptions;
+import com.ibm.cloud.platform_services.iam_identity.v1.model.TemplateAccountSettings;
 import com.ibm.cloud.platform_services.iam_identity.v1.model.UserMfa;
 import com.ibm.cloud.platform_services.iam_identity.v1.utils.TestUtilities;
 import com.ibm.cloud.sdk.core.service.model.FileWithMetadata;
@@ -33,6 +34,15 @@ public class CreateAccountSettingsTemplateOptionsTest {
 
   @Test
   public void testCreateAccountSettingsTemplateOptions() throws Throwable {
+    AccountSettingsUserDomainRestriction accountSettingsUserDomainRestrictionModel = new AccountSettingsUserDomainRestriction.Builder()
+      .realmId("IBMid")
+      .invitationEmailAllowPatterns(java.util.Arrays.asList("*.*@company.com"))
+      .restrictInvitation(true)
+      .build();
+    assertEquals(accountSettingsUserDomainRestrictionModel.realmId(), "IBMid");
+    assertEquals(accountSettingsUserDomainRestrictionModel.invitationEmailAllowPatterns(), java.util.Arrays.asList("*.*@company.com"));
+    assertEquals(accountSettingsUserDomainRestrictionModel.restrictInvitation(), Boolean.valueOf(true));
+
     UserMfa userMfaModel = new UserMfa.Builder()
       .iamId("testString")
       .mfa("NONE")
@@ -40,38 +50,44 @@ public class CreateAccountSettingsTemplateOptionsTest {
     assertEquals(userMfaModel.iamId(), "testString");
     assertEquals(userMfaModel.mfa(), "NONE");
 
-    AccountSettingsComponent accountSettingsComponentModel = new AccountSettingsComponent.Builder()
+    TemplateAccountSettings templateAccountSettingsModel = new TemplateAccountSettings.Builder()
       .restrictCreateServiceId("NOT_SET")
       .restrictCreatePlatformApikey("NOT_SET")
+      .restrictUserListVisibility("NOT_RESTRICTED")
+      .restrictUserDomains(java.util.Arrays.asList(accountSettingsUserDomainRestrictionModel))
       .allowedIpAddresses("testString")
       .mfa("NONE")
-      .userMfa(java.util.Arrays.asList(userMfaModel))
       .sessionExpirationInSeconds("86400")
       .sessionInvalidationInSeconds("7200")
       .maxSessionsPerIdentity("testString")
       .systemAccessTokenExpirationInSeconds("3600")
       .systemRefreshTokenExpirationInSeconds("259200")
+      .userMfa(java.util.Arrays.asList(userMfaModel))
+      .restrictUserDomainsAccountOverride(true)
       .build();
-    assertEquals(accountSettingsComponentModel.restrictCreateServiceId(), "NOT_SET");
-    assertEquals(accountSettingsComponentModel.restrictCreatePlatformApikey(), "NOT_SET");
-    assertEquals(accountSettingsComponentModel.allowedIpAddresses(), "testString");
-    assertEquals(accountSettingsComponentModel.mfa(), "NONE");
-    assertEquals(accountSettingsComponentModel.userMfa(), java.util.Arrays.asList(userMfaModel));
-    assertEquals(accountSettingsComponentModel.sessionExpirationInSeconds(), "86400");
-    assertEquals(accountSettingsComponentModel.sessionInvalidationInSeconds(), "7200");
-    assertEquals(accountSettingsComponentModel.maxSessionsPerIdentity(), "testString");
-    assertEquals(accountSettingsComponentModel.systemAccessTokenExpirationInSeconds(), "3600");
-    assertEquals(accountSettingsComponentModel.systemRefreshTokenExpirationInSeconds(), "259200");
+    assertEquals(templateAccountSettingsModel.restrictCreateServiceId(), "NOT_SET");
+    assertEquals(templateAccountSettingsModel.restrictCreatePlatformApikey(), "NOT_SET");
+    assertEquals(templateAccountSettingsModel.restrictUserListVisibility(), "NOT_RESTRICTED");
+    assertEquals(templateAccountSettingsModel.restrictUserDomains(), java.util.Arrays.asList(accountSettingsUserDomainRestrictionModel));
+    assertEquals(templateAccountSettingsModel.allowedIpAddresses(), "testString");
+    assertEquals(templateAccountSettingsModel.mfa(), "NONE");
+    assertEquals(templateAccountSettingsModel.sessionExpirationInSeconds(), "86400");
+    assertEquals(templateAccountSettingsModel.sessionInvalidationInSeconds(), "7200");
+    assertEquals(templateAccountSettingsModel.maxSessionsPerIdentity(), "testString");
+    assertEquals(templateAccountSettingsModel.systemAccessTokenExpirationInSeconds(), "3600");
+    assertEquals(templateAccountSettingsModel.systemRefreshTokenExpirationInSeconds(), "259200");
+    assertEquals(templateAccountSettingsModel.userMfa(), java.util.Arrays.asList(userMfaModel));
+    assertEquals(templateAccountSettingsModel.restrictUserDomainsAccountOverride(), Boolean.valueOf(true));
 
     CreateAccountSettingsTemplateOptions createAccountSettingsTemplateOptionsModel = new CreateAccountSettingsTemplateOptions.Builder()
       .accountId("testString")
       .name("testString")
       .description("testString")
-      .accountSettings(accountSettingsComponentModel)
+      .accountSettings(templateAccountSettingsModel)
       .build();
     assertEquals(createAccountSettingsTemplateOptionsModel.accountId(), "testString");
     assertEquals(createAccountSettingsTemplateOptionsModel.name(), "testString");
     assertEquals(createAccountSettingsTemplateOptionsModel.description(), "testString");
-    assertEquals(createAccountSettingsTemplateOptionsModel.accountSettings(), accountSettingsComponentModel);
+    assertEquals(createAccountSettingsTemplateOptionsModel.accountSettings(), templateAccountSettingsModel);
   }
 }

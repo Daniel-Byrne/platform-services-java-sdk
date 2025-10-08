@@ -22,6 +22,7 @@ import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -112,6 +113,10 @@ public class IamIdentityIT extends SdkIntegrationTestBase {
 
     @Override
     public String getConfigFilename() {
+		if(System.getProperty("IBM_CREDENTIALS_FILE") != null) {
+			return System.getProperty("IBM_CREDENTIALS_FILE");
+		}
+
         return "../../iam_identity.env";
     }
 
@@ -2577,9 +2582,17 @@ public class IamIdentityIT extends SdkIntegrationTestBase {
     public void testCreateAccountSettingsTemplate() throws Exception {
         try {
 
-        	AccountSettingsComponent accountSettings = new AccountSettingsComponent.Builder()
+        	AccountSettingsUserDomainRestriction domainRestriction = new AccountSettingsUserDomainRestriction.Builder()
+        			.addInvitationEmailAllowPatterns("*@company.com")
+        			.restrictInvitation(true)
+        			.realmId("IBMid")
+        			.build();
+        			
+        	TemplateAccountSettings accountSettings = new TemplateAccountSettings.Builder()
         			.mfa("LEVEL1")
         			.systemAccessTokenExpirationInSeconds("3000")
+        			.restrictUserDomains(Collections.singletonList(domainRestriction))
+        			.restrictUserDomainsAccountOverride(true)
         			.build();
         	CreateAccountSettingsTemplateOptions createOptions = new CreateAccountSettingsTemplateOptions.Builder()
         			.accountId(ENTERPRISE_ACCOUNT_ID)
@@ -2655,7 +2668,7 @@ public class IamIdentityIT extends SdkIntegrationTestBase {
     @Test(dependsOnMethods = { "testCreateAccountSettingsTemplate" })
     public void testUpdateAccountSettingsTemplate() throws Exception {
         try {
-        	AccountSettingsComponent accountSettings = new AccountSettingsComponent.Builder()
+        	TemplateAccountSettings accountSettings = new TemplateAccountSettings.Builder()
         			.mfa("LEVEL1")
         			.systemAccessTokenExpirationInSeconds("3000")
         			.build();
@@ -2729,7 +2742,7 @@ public class IamIdentityIT extends SdkIntegrationTestBase {
     @Test(dependsOnMethods = { "testAssignAccountSettingsTemplate" })
     public void testCreateNewAccountSettingsTemplateVersion() throws Exception {
         try {
-        	AccountSettingsComponent accountSettings = new AccountSettingsComponent.Builder()
+        	TemplateAccountSettings accountSettings = new TemplateAccountSettings.Builder()
         			.mfa("LEVEL1")
         			.systemAccessTokenExpirationInSeconds("2600")
         			.restrictCreatePlatformApikey("RESTRICTED")

@@ -19,7 +19,7 @@ import com.google.gson.annotations.SerializedName;
 import com.ibm.cloud.sdk.core.service.model.GenericModel;
 
 /**
- * Response body format for Account Settings REST requests.
+ * Input body parameters for the Account Settings REST request.
  */
 public class AccountSettingsAssignedTemplatesSection extends GenericModel {
 
@@ -124,6 +124,8 @@ public class AccountSettingsAssignedTemplatesSection extends GenericModel {
   protected String systemRefreshTokenExpirationInSeconds;
   @SerializedName("user_mfa")
   protected List<AccountSettingsUserMFAResponse> userMfa;
+  @SerializedName("restrict_user_domains_account_override")
+  protected Boolean restrictUserDomainsAccountOverride;
 
   protected AccountSettingsAssignedTemplatesSection() { }
 
@@ -319,6 +321,18 @@ public class AccountSettingsAssignedTemplatesSection extends GenericModel {
    */
   public List<AccountSettingsUserMFAResponse> getUserMfa() {
     return userMfa;
+  }
+
+  /**
+   * Gets the restrictUserDomainsAccountOverride.
+   *
+   * Defines if enterprise defined domain restrictions can be ignored in favour of the restriction defined at the
+   * account level.
+   *
+   * @return the restrictUserDomainsAccountOverride
+   */
+  public Boolean isRestrictUserDomainsAccountOverride() {
+    return restrictUserDomainsAccountOverride;
   }
 }
 
